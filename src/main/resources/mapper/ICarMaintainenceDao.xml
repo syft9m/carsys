@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jike.carsys.dao.ICarMaintenanceDao">
+    <!--配置resultMap对应java类-->
+    <resultMap id="rm" type="com.jike.carsys.bean.CarMaintenance">
+        <id column="id" javaType="java.lang.Integer" jdbcType="INTEGER" property="maintenanceId"/>
+        <result column="appointmentTime" javaType="java.lang.String" jdbcType="VARCHAR" property="appointmentTime"/>
+        <result column="isVip" javaType="java.lang.String" jdbcType="VARCHAR" property="isVip"/>
+        <result column="name" javaType="java.lang.String" jdbcType="VARCHAR" property="name"/>
+        <result column="phone" javaType="java.lang.String" jdbcType="VARCHAR" property="phone"/>
+        <result column="carNo" javaType="java.lang.String" jdbcType="VARCHAR" property="carNo"/>
+    </resultMap>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from car_maintenance
+    </select>
+
+    <!--插入数据-->
+    <insert id="insert" parameterType="java.util.List">
+        insert into car_maintenance (id,appointmentTime,isVip,name,phone,carNo)
+        values
+        <!--遍历list-->
+        <foreach collection="list" item="c" separator=",">
+            (
+            #{c.maintenanceId},
+            #{c.appointmentTime},
+            #{c.isVip},
+            #{c.name},
+            #{c.phone},
+            #{c.carNo}
+            )
+        </foreach>
+    </insert>
+    <!--删除数据-->
+    <delete id="delete">
+        delete from car_maintenance
+        where 1=1
+        <!--拼接查询字段-->
+        <if test="c!=null">
+            <!--查询字段id-->
+            <if test="c.maintenanceId!=null">and id=#{c.maintenanceId}</if>
+            <!--查询字段appointmentTime-->
+            <if test="c.appointmentTime!=null and c.appointmentTime!=''">and appointmentTime=#{c.appointmentTime}</if>
+            <!--查询字段isVip-->
+            <if test="c.isVip!=null and c.isVip!=''">and isVip=#{c.isVip}</if>
+            <!--查询字段name-->
+            <if test="c.name!=null">and name &lt;=#{c.name}</if>
+            <!--查询字段phone-->
+            <if test="c.phone!=null">and phone &lt;=#{c.phone}</if>
+            <!--查询字段name-->
+            <if test="c.carNo!=null">and carNo &lt;=#{c.carNo}</if>
+            <!--无查询字段-->
+            <if test="c.maintenanceId==null and (c.appointmentTime==null or c.appointmentTime=='') and (c.isVip==null) and (c.name==null or c.name=='') and (c.phone==null or c.phone=='') and (c.carNo==null or c.carNo=='')">
+                and 1!=1
+            </if>
+        </if>
+    </delete>
+    <!--更新数据-->
+    <update id="update">
+        <if test="u!=null and ( (u.name!=null and u.name!='') or (u.phone!=null and u.phone!='')
+                    or u.isVip!=null)">
+            update car_maintenance set
+            <!--拼接更新字段，更新字段name-->
+            <if test="u.name!=null and u.name!=''">name=#{u.name}</if>
+            <!--更新字段phone-->
+            <if test="u.phone!=null and u.phone!=''">
+                phone=#{u.phone}
+            </if>
+            <!--更新字段isVip-->
+            <if test="u.isVip!=null">
+                isVip=#{u.isVip}
+            </if>
+
+            where 1=1
+            <!--拼接查询字段-->
+            <if test="q!=null">
+                <!--查询字段id-->
+                <if test="q.maintenanceId!=null">and id=#{q.maintenanceId}</if>
+                <!--查询字段appointmentTime-->
+                <if test="q.appointmentTime!=null and q.appointmentTime!=''">and appointmentTime =
+                    #{q.appointmentTime}
+                </if>
+                <!--查询字段isVip-->
+                <if test="q.isVip!=null and q.isVip!=''">and isVip=#{q.isVip}</if>
+                <!--查询字段name-->
+                <if test="q.name!=null">and name &lt;=#{q.name}</if>
+                <!--查询字段phone-->
+                <if test="q.phone!=null">and phone &lt;=#{q.phone}</if>
+                <!--查询字段name-->
+                <if test="q.carNo!=null">and carNo &lt;=#{q.carNo}</if>
+                <!--无查询字段-->
+                <if test="q.maintenanceId==null and (q.appointmentTime==null or q.appointmentTime=='') and (q.isVip==null) and (q.name==null or q.name=='') and (q.phone==null or q.phone=='') and (q.carNo==null or q.carNo=='')">
+                    and 1!=1
+                </if>
+            </if>
+        </if>
+    </update>
+    <select id="query" resultMap="rm">
+        select * from car_maintenance
+        where 1=1
+        <!--拼接查询字段-->
+        <if test="c!=null">
+            <!--查询字段id-->
+            <if test="c.maintenanceId!=null">and id=#{c.maintenanceId}</if>
+            <!--查询字段appointmentTime-->
+            <if test="c.appointmentTime!=null and c.appointmentTime!=''">and appointmentTime=#{c.appointmentTime}</if>
+            <!--查询字段isVip-->
+            <if test="c.isVip!=null and c.isVip!=''">and isVip=#{c.isVip}</if>
+            <!--查询字段name-->
+            <if test="c.name!=null">and name &lt;=#{c.name}</if>
+            <!--查询字段phone-->
+            <if test="c.phone!=null">and phone &lt;=#{c.phone}</if>
+            <!--查询字段name-->
+            <if test="c.carNo!=null">and carNo &lt;=#{c.carNo}</if>
+            <!--无查询字段-->
+            <if test="c.maintenanceId==null and (c.appointmentTime==null or c.appointmentTime=='') and (c.isVip==null) and (c.name==null or c.name=='') and (c.phone==null or c.phone=='') and (c.carNo==null or c.carNo=='')">
+                and 1!=1
+            </if>
+        </if>
+    </select>
+</mapper>
